@@ -1,0 +1,15 @@
+#map{
+    height: 500px;
+    width: 100%;
+    position: relative;
+}
+
+@media (max-width: 768px){
+    #search{
+        display: none;
+    }
+    
+    #filters{
+        display: none;
+    }
+}

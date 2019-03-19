@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Categorie;
 use App\Magasin;
+use App\Promotion;
 use App\Ville;
 use Illuminate\Http\Request;
 
@@ -15,30 +17,36 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth')->except(['postCitiesSearch', 'postStoresSearch']);
-    }
-
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        return view('home');
+        $this->middleware('auth')->except(['postCitiesSearch', 'postStoresSearch', 'postCategoriesSearch', 'postPromosSearch']);
     }
 
     public function postStoresSearch(Request $request) {
 
         $NE = explode('|', $request->input('NE'));
         $SW = explode('|', $request->input('SW'));
+        $type = $request->input('type');
+        $cat = $request->input('categorie');
 
-        $magasins = Ville::join('magasins', 'magasins.codeINSEEVille','=','villes.codeINSEEVille')
+        $query = Magasin::join('villes', 'magasins.codeINSEEVille', '=', 'villes.codeINSEEVille')
+            ->join('users', 'magasins.idResponsable', '=', 'users.idUser')
+            ->join('types', 'magasins.idType', '=', 'types.idType')
+            ->leftjoin('categories', 'magasins.idCategorie', '=', 'categories.idCategorie')
             ->whereBetween('longMagasin', [$SW[1], $NE[1]])
-            ->whereBetween('latMagasin', [$SW[0], $NE[0]])
-            ->get();
+            ->whereBetween('latMagasin', [$SW[0], $NE[0]]);
+
+        if($type){
+            $query->where('magasins.idType', $type);
+        }
+        if($cat){
+            $query->where('magasins.idCategorie', $cat);
+        }
+
+        $magasins = $query->get();
+
+
 
         return $magasins;
+
     }
 
     public function postCitiesSearch(Request $request) {
@@ -51,4 +59,22 @@ class HomeController extends Controller
 
         return $cities;
     }
+
+    public function postCategoriesSearch(Request $request) {
+        $type = $request->input('idType');
+
+        $categories = Categorie::where('idType', '=', $type)
+            ->get();
+
+        return $categories;
+    }
+
+    public function postPromosSearch(Request $request){
+        $promos = Promotion::where('idMagasin', $request->input('magasin'))
+            ->where('etatPromo', 1)
+            ->get();
+
+        return $promos;
+    }
+
 }

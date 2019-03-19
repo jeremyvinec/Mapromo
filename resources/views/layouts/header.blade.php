@@ -1,19 +1,17 @@
-<section class="jumbotron text-center">
-
-     <div class="container">
-
-       <h1 class="jumbotron-heading">Album example</h1>
-
-       <p class="lead text-muted">Something short and leading about the collection below—its contents, the creator, etc. Make it short and sIet, but not too short so folks don't simply skip over it entirely.</p>
-
-       <p>
-
-         <a href="#" class="btn btn-primary">Main call to action</a>
-
-         <a href="#" class="btn btn-secondary">Secondary action</a>
-
-       </p>
-
-     </div>
-
-</section>
+<div class="flex-center position-ref full-height">
+@if (Route::has('login'))
+    <div class="top-right links">
+        @auth
+            <a href="{{ url('/home') }}">Home</a>
+        @else
+            <div class="dropdown">
+                <button class="dropbtn">Register</button>
+                <div class="dropdown-content">
+                    <a href="{{ route('register') }}">Client</a>
+                    <a href="{{ route('register') }}">Responsable Magasin</a>
+                </div>
+            </div>
+            <a href="{{ route('login') }}">Login</a>
+        @endauth
+    </div>
+@endif

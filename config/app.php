@@ -39,7 +39,7 @@ return [
     |
     */
 
-    'debug' => env('APP_DEBUG', false),
+    'debug' => env('APP_DEBUG', true),
 
     /*
     |--------------------------------------------------------------------------
@@ -177,6 +177,13 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        /*
+         * For Captcha
+         */
+        Anhskohbo\NoCaptcha\NoCaptchaServiceProvider::class,
+		Barryvdh\Debugbar\ServiceProvider::class,
+        Laravel\Socialite\SocialiteServiceProvider::class,
+
     ],
 
     /*
@@ -225,6 +232,9 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        'NoCaptcha' => Anhskohbo\NoCaptcha\Facades\NoCaptcha::class,
+		'Debugbar' => Barryvdh\Debugbar\Facade::class,
+        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
 
     ],
 
